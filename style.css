@@ -1,0 +1,14 @@
+h1.style1 {
+  background: salmon;
+  border-radius: 1cm;
+  align-content: space-around;
+  align-self: auto;
+}
+
+#gameScreen {
+  border: 4px solid black;
+}
+
+img {
+  display: none;
+}
