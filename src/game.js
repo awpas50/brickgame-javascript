@@ -14,6 +14,7 @@ const GAMESTATE = {
 export default class Game {
     constructor() {
         this.lives = 3;
+        this.isBallOnThePaddle = false;
         this.gameState = GAMESTATE.MENU;
         this.paddle = new Paddle(150, 30, this);
         this.ball = new Ball(16, 16, this);
@@ -25,10 +26,18 @@ export default class Game {
     }
 
     loadFirstLevel() {
-        if(this.gameState == GAMESTATE.MENU) {
+        if(this.gameState === GAMESTATE.MENU) {
             this.bricks = buildLevel(level1, this);
             this.gameObjects = [this.ball, this.paddle];
             this.gameState = GAMESTATE.RUNNING;
+            this.isBallOnThePaddle = false;
+        }
+    }
+
+    releaseBall() {
+        if(this.gameState === GAMESTATE.RUNNING) {
+            console.log("Release");
+            this.isBallOnThePaddle = true;
         }
     }
 
@@ -36,9 +45,11 @@ export default class Game {
         this.bricks = buildLevel(level, this);
         this.gameObjects = [this.ball, this.paddle];
         this.gameState = GAMESTATE.RUNNING;
+        this.isBallOnThePaddle = false;
     }
 
     update(deltaTime) {
+        console.log(this.isBallOnThePaddle);
         if(this.lives == 0) {
             this.gameState = GAMESTATE.GAMEOVER;
         }
@@ -52,13 +63,20 @@ export default class Game {
         }
         if(this.gameState == GAMESTATE.RUNNING) {
             //this.gameObjects.forEach(object => object.update(deltaTime));
-            [...this.gameObjects, ...this.bricks].forEach(object => object.update(deltaTime));
+            if(this.isBallOnThePaddle) {
+                this.ball.update(deltaTime);
+            }
+            else {
+                this.ball.position = {x: this.paddle.position.x + this.paddle.width / 2 - this.ball.sizeX / 2, 
+                    y: this.paddle.position.y - this.ball.sizeY};
+            }
+            [this.paddle, ...this.bricks].forEach(object => object.update(deltaTime));
             this.bricks = this.bricks.filter(object => !object.markedForDeletion)
         }
     }
 
     draw(ctx) {
-        [...this.gameObjects, ...this.bricks].forEach(object => object.draw(ctx));
+        [this.ball, this.paddle, ...this.bricks].forEach(object => object.draw(ctx));
         if(this.gameState == GAMESTATE.PAUSED) {
             ctx.rect(0, 0, window.GAME_WIDTH, window.GAME_HEIGHT);
             ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -99,5 +117,13 @@ export default class Game {
         } else {
             this.gameState = 0;
         }
+    }
+
+    deductLive() {
+        this.lives--;
+    }
+
+    stopBall() {
+        this.isBallOnThePaddle = false;
     }
 }

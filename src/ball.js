@@ -9,12 +9,29 @@ export default class Ball {
 
         this.game = game;
         this.reset();
+        this.setRandomSpeed();
     }
     
+    setRandomSpeed() {
+        // 0 ~ 3
+        let seed = Math.floor(Math.random() * 4);
+        switch(seed) {
+            case 0:
+                this.speed = {x: Math.random() * (3 - 1.5) + 1.5, y: -3};
+                break;
+            case 1:
+                this.speed = {x: Math.random() * (1.5 - 0.5) + 0.5, y: -5};
+                break;
+            case 2:
+                this.speed = {x: Math.random() * (-1.5 - -0.5) + -0.5, y: -5};
+                break;
+            case 3:
+                this.speed = {x: Math.random() * (-3 - -1.5) + -1.5, y: -3};
+                break;
+        }
+    }
     reset() {
-        this.position = {x: this.game.paddle.position.x + this.game.paddle.width / 2, y: this.game.paddle.position.y};
-        this.speed = {x: 3, y: -3};
-        console.log(this.position.x, this.position.y);
+        this.position = {x: this.game.paddle.position.x + this.game.paddle.width / 2, y: this.game.paddle.position.y - this.sizeY};
     }
     draw(ctx) {
         ctx.drawImage(this.image, 
@@ -35,8 +52,10 @@ export default class Ball {
         }
         // wall on bottom ( -1 live)
         if(this.position.y + this.sizeY / 2 > window.GAME_HEIGHT) {
-            this.game.lives--;
+            this.game.deductLive();
+            this.game.stopBall();
             this.reset();
+            this.setRandomSpeed();
         }
 
         if(detectCollision(this, this.game.paddle)) {

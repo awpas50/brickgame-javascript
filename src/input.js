@@ -13,6 +13,7 @@ export default class InputHandler {
                     game.togglePause();
                     break;
                 case 32: // Space
+                    game.releaseBall();
                     game.loadFirstLevel();
                     break;
             }
