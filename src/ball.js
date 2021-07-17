@@ -17,16 +17,16 @@ export default class Ball {
         let seed = Math.floor(Math.random() * 4);
         switch(seed) {
             case 0:
-                this.speed = {x: Math.random() * (3 - 1.5) + 1.5, y: -3};
+                this.speed = {x: Math.random() * (3 - 1.5) + 1.5, y: -4};
                 break;
             case 1:
-                this.speed = {x: Math.random() * (1.5 - 0.5) + 0.5, y: -5};
+                this.speed = {x: Math.random() * (1.5 - 0.9) + 0.9, y: -6};
                 break;
             case 2:
-                this.speed = {x: Math.random() * (-1.5 - -0.5) + -0.5, y: -5};
+                this.speed = {x: Math.random() * (-1.5 - -0.9) + -0.9, y: -6};
                 break;
             case 3:
-                this.speed = {x: Math.random() * (-3 - -1.5) + -1.5, y: -3};
+                this.speed = {x: Math.random() * (-3 - -1.5) + -1.5, y: -4};
                 break;
         }
     }

@@ -13,6 +13,7 @@ export default class Brick {
     }
 
     draw(ctx) {
+        ctx.imageSmoothingEnabled = false;
         ctx.drawImage(this.image, 
             this.position.x, this.position.y, this.width, this.height);
     }
